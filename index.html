@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Premium Media Playlist</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #0d0b14 0%, #0a080d 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 30px 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+            text-align: center;
+            background: linear-gradient(90deg, #ff4500, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .song-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            position: relative;
+            height: 60px;
+        }
+
+        .song-header {
+            height: 60px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.85);
+            transition: opacity 0.3s ease;
+        }
+
+        .card-preview {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+        }
+
+        .card-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.5) 60%, rgba(0, 0, 0, 0.2) 100%);
+            z-index: 1;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease 0.1s;
+        }
+
+        .card-title {
+            font-family: "Georgia", serif;
+            font-size: 24px;
+            font-style: italic;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .card-author {
+            font-family: "Impact", "Arial Black", sans-serif;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ff5511;
+        }
+
+        .song-item.active {
+            height: 260px;
+            border-color: rgba(255, 85, 17, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .song-item.active .song-header {
+            opacity: 0;
+        }
+
+        .song-item.active .card-preview {
+            transform: translateY(0);
+        }
+
+        .song-item.active .card-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .song-item:active {
+            transform: scale(0.99);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>PLAYLIST PREVIEW</h1>
+        <ul>
+            <li class="song-item" data-author="Europe" data-title="The Final Countdown" data-img="/storage/emulated/0/cov/Europe.jpg">
+                <div class="song-header">1) The Final Countdown</div>
+            </li>
+            <li class="song-item" data-author="RHCP" data-title="Can't stop" data-img="https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?q=80&w=500">
+                <div class="song-header">2) Can't stop</div>
+            </li>
+            <li class="song-item" data-author="Måneskin" data-title="Beggin'" data-img="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=500">
+                <div class="song-header">3) Beggin'</div>
+            </li>
+            <li class="song-item" data-author="No Doubt" data-title="Don't speak" data-img="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=500">
+                <div class="song-header">4) Don't speak</div>
+            </li>
+            <li class="song-item" data-author="The Cardigans" data-title="My favorite game" data-img="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=500">
+                <div class="song-header">5) My favorite game</div>
+            </li>
+            <li class="song-item" data-author="Survivor" data-title="Eye of the tiger" data-img="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=500">
+                <div class="song-header">6) Eye of the tiger</div>
+            </li>
+            <li class="song-item" data-author="Rammstein" data-title="Du hast" data-img="https://images.unsplash.com/photo-1548778052-311f4bc2b502?q=80&w=500">
+                <div class="song-header">7) Du hast</div>
+            </li>
+            <li class="song-item" data-author="Scorpions" data-title="Still loving you" data-img="https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=500">
+                <div class="song-header">8) Still loving you</div>
+            </li>
+            <li class="song-item" data-author="Ария" data-title="Беспечный ангел" data-img="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?q=80&w=500">
+                <div class="song-header">9) Беспечный ангел</div>
+            </li>
+            <li class="song-item" data-author="Кипелов" data-title="Вавилон" data-img="https://images.unsplash.com/photo-1487180142328-0c4e37023af5?q=80&w=500">
+                <div class="song-header">10) Вавилон</div>
+            </li>
+            <li class="song-item" data-author="Three Days Grace" data-title="Animal I have become" data-img="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?q=80&w=500">
+                <div class="song-header">11) Animal I have become</div>
+            </li>
+            <li class="song-item" data-author="Нервы" data-title="Спать" data-img="https://images.unsplash.com/photo-1446057032654-9d8885b76c2a?q=80&w=500">
+                <div class="song-header">12) Спать</div>
+            </li>
+            <li class="song-item" data-author="Dominic Fike" data-title="Babydoll" data-img="https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=500">
+                <div class="song-header">13) Babydoll</div>
+            </li>
+            <li class="song-item" data-author="The Cranberries" data-title="Zombie" data-img="https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=500">
+                <div class="song-header">14) Zombie</div>
+            </li>
+            <li class="song-item" data-author="Skillet" data-title="Monster" data-img="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?q=80&w=500">
+                <div class="song-header">15) Monster</div>
+            </li>
+            <li class="song-item" data-author="Rammstein" data-title="Sonne" data-img="https://images.unsplash.com/photo-1518609878373-06d740f60d8b?q=80&w=500">
+                <div class="song-header">16) Sonne</div>
+            </li>
+            <li class="song-item" data-author="Ssshhhiiittt!" data-title="Танцы" data-img="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?q=80&w=500">
+                <div class="song-header">17) Танцы</div>
+            </li>
+            <li class="song-item" data-author="ТДД" data-title="Перезаряжай" data-img="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=500">
+                <div class="song-header">18) Перезаряжай</div>
+            </li>
+            <li class="song-item" data-author="Papa Roach" data-title="Last Resort" data-img="https://images.unsplash.com/photo-1511192336575-5a79af67a629?q=80&w=500">
+                <div class="song-header">19) Last Resort</div>
+            </li>
+            <li class="song-item" data-author="Gary Moore" data-title="Still loving you" data-img="https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?q=80&w=500">
+                <div class="song-header">20) Still loving you</div>
+            </li>
+            <li class="song-item" data-author="Sweetheart" data-title="She's" data-img="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=500">
+                <div class="song-header">21) She's</div>
+            </li>
+            <li class="song-item" data-author="Marilyn Manson" data-title="Sweet dreams" data-img="https://images.unsplash.com/photo-1509248961158-e54f6934749c?q=80&w=500">
+                <div class="song-header">22) Sweet dreams</div>
+            </li>
+            <li class="song-item" data-author="Bring Me The Horizon" data-title="Can you feel my heart" data-img="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=500">
+                <div class="song-header">23) Can you feel my heart</div>
+            </li>
+            <li class="song-item" data-author="Сектор Газа" data-title="Туман" data-img="https://images.unsplash.com/photo-1542323812-402b66236b3b?q=80&w=500">
+                <div class="song-header">24) Туман</div>
+            </li>
+            <li class="song-item" data-author="Айскрин" data-title="Между нами километры" data-img="https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=500">
+                <div class="song-header">25) Между нами километры</div>
+            </li>
+            <li class="song-item" data-author="System of a Down" data-title="Lonely day" data-img="https://images.unsplash.com/photo-1471478331149-c72f17e33c73?q=80&w=500">
+                <div class="song-header">26) Lonely day</div>
+            </li>
+            <li class="song-item" data-author="Metallica" data-title="Enter sandman" data-img="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=500">
+                <div class="song-header">27) Enter sandman</div>
+            </li>
+            <li class="song-item" data-author="Rammstein" data-title="Engel" data-img="https://images.unsplash.com/photo-1550184658-ff613237a7cc?q=80&w=500">
+                <div class="song-header">28) Engel</div>
+            </li>
+            <li class="song-item" data-author="Ozzy Osbourne" data-title="No more tears" data-img="https://images.unsplash.com/photo-1465847899084-d164df4dedc6?q=80&w=500">
+                <div class="song-header">29) No more tears</div>
+            </li>
+            <li class="song-item" data-author="Кипелов" data-title="Я Свободен" data-img="https://images.unsplash.com/photo-1454482949949-2f2703da92b5?q=80&w=500">
+                <div class="song-header">30) Я Свободен</div>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        const songItems = document.querySelectorAll('.song-item');
+
+        songItems.forEach(item => {
+            const author = item.getAttribute('data-author');
+            const title = item.getAttribute('data-title');
+            const imgSrc = item.getAttribute('data-img');
+
+            const preview = document.createElement('div');
+            preview.className = 'card-preview';
+            preview.style.backgroundImage = `url('${imgSrc}')`;
+
+            const content = document.createElement('div');
+            content.className = 'card-content';
+
+            const titleEl = document.createElement('div');
+            titleEl.className = 'card-title';
+            titleEl.textContent = title;
+
+            const authorEl = document.createElement('div');
+            authorEl.className = 'card-author';
+            authorEl.textContent = author;
+
+            content.appendChild(titleEl);
+            content.appendChild(authorEl);
+            preview.appendChild(content);
+            item.appendChild(preview);
+
+            item.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                songItems.forEach(i => i.classList.remove('active'));
+                
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
