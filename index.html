@@ -61,6 +61,33 @@
             flex-direction: column;
             gap: 14px;
         }
+
+        /* --- Стили для плавного раскрытия контента --- */
+        .card-preview {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            /* Используем cubic-bezier для эффекта «пружины» (эластичности) при открытии */
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        }
+
+        /* Эффект появления текста внутри открывающейся карточки */
+        .card-content {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease 0.1s, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+        }
+
+        /* Стили, когда карточка активна (класс .active добавляется по клику) */
+        .song-item.active .card-preview {
+            opacity: 1;
+            /* Высота теперь задается динамически через JS для идеальной плавности */
+        }
+
+        .song-item.active .card-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
@@ -191,15 +218,27 @@
             preview.appendChild(content);
             item.appendChild(preview);
 
+            // Клик с плавной умной анимацией открытия/закрытия
             item.addEventListener('click', () => {
                 const isActive = item.classList.contains('active');
-                songItems.forEach(i => i.classList.remove('active'));
+                
+                // Закрываем все остальные открытые карточки
+                songItems.forEach(i => {
+                    i.classList.remove('active');
+                    const p = i.querySelector('.card-preview');
+                    if (p) p.style.maxHeight = '0px';
+                });
+
+                // Если кликнули на закрытую — плавно открываем её
                 if (!isActive) {
                     item.classList.add('active');
+                    // scrollHeight считывает реальную высоту контента карточки
+                    preview.style.maxHeight = preview.scrollHeight + 'px';
                 }
             });
         });
 
+        // Старый ленивый скролл (IntersectionObserver) оставляем без изменений
         const observerOptions = {
             root: null,
             rootMargin: '0px 0px -30px 0px',
